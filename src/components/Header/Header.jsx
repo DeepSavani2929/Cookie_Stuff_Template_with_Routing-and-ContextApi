@@ -7,11 +7,13 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import CartModal from "../cartTable/CartModal.jsx";
 import { clearCart, getCartCourses } from "../../store/cart/cartSlice.jsx";
+import Cookies from "js-cookie";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart?.cartItems || []);
@@ -22,17 +24,25 @@ const Header = () => {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
+
+useEffect(() => {
+  console.log(Cookies.get("accessToken"))
+  const isLoggedIn = Boolean(Cookies.get("accessToken"));
+  setIsLoggedIn(isLoggedIn)
+},[isLoggedIn,dispatch])
+
+
+
   console.log(isLoggedIn);
   const handleProfileClick = (event) => setOpenProfile(event.currentTarget);
   const handleProfileClose = () => setOpenProfile(null);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    dispatch(clearCart());
-    handleProfileClose();
-    navigate("/signIn");
-  };
+const handleLogout = () => {
+  Cookies.remove("accessToken");
+  dispatch(clearCart());          
+  handleProfileClose();    
+  navigate("/signIn");            
+};
 
   return (
     <>

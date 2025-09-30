@@ -20,8 +20,9 @@ import blog2 from "../../assets/images/blog2.jpg";
 import blog3 from "../../assets/images/blog3.jpg";
 import axios from "axios";
 
-const initialState = {
 
+
+const initialState = {
   posts: [
     {
       id: 21,
@@ -83,8 +84,6 @@ const initialState = {
         "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident",
     },
   ],
-
-
 
   courseDetails: [
     {
@@ -353,48 +352,45 @@ const initialState = {
     },
   ],
 
-
-
   features: [],
 
   recipes: [],
 
   healthy: [],
 
-  cartItems: []
+  cartItems: [],
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-        
-     getAllCourses: (state, action) => {
-     const { type, data } = action.payload;
+    getAllCourses: (state, action) => {
+      const { type, data } = action.payload;
       if (type === "Features") state.features = data;
       if (type === "Recipes") state.recipes = data;
       if (type === "Healthy") state.healthy = data;
-     },
+    },
 
-     getAllCartCourses: (state, action) => {
-           state.cartItems = action.payload
-           console.log(action.payload)
-     },
+    getAllCartCourses: (state, action) => {
+      state.cartItems = action.payload;
+      console.log(action.payload);
+    },
 
-     clearCart: (state) => {
-        state.cartItems = []
-     }
+    clearCart: (state) => {
+      state.cartItems = [];
+    },
   },
 });
-
-
 
 export const getCourses = createAsyncThunk(
   "getCourses",
   async (courseType, { dispatch }) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/allCourses/getAllCourses?courseType=${courseType}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/allCourses/getAllCourses?courseType=${courseType}`,
         { withCredentials: true }
       );
 
@@ -410,132 +406,184 @@ export const getCourses = createAsyncThunk(
   }
 );
 
-
-
 export const getCartCourses = createAsyncThunk(
   "getCartCourses",
-  async(_, { dispatch }) => {
-      try{
-          const res = await axios.get(`${import.meta.env.VITE_API_URL}/allCartCourses/getAllCoursesAvailableIntoCart`, {
-              withCredentials: true
-           })
+  async (_, { dispatch }) => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/allCartCourses/getAllCoursesAvailableIntoCart`,
+        {
+          withCredentials: true,
+        }
+      );
 
-           if(res.data?.success){
-
-               dispatch(getAllCartCourses(res.data.data))
-           }
-           else if(res.data.data.length === 0){
-              dispatch(getAllCartCourses([]))
-           }
+      if (res.data?.success) {
+        dispatch(getAllCartCourses(res.data.data));
+      } else if (res.data.data.length === 0) {
+        dispatch(getAllCartCourses([]));
       }
-
-      catch(error){
-        console.log(error)
-      }
+    } catch (error) {
+      console.log(error);
+    }
   }
-)
+);
 
 export const addCourseIntoTheCart = createAsyncThunk(
-   "addCourseIntoTheCart",
-   async(cartPayload, { dispatch }) => {
-       try{
-        console.log(cartPayload)
-          const res =  await axios.post(`${import.meta.env.VITE_API_URL}/allCartCourses/addIntoTheCart/${cartPayload.id}`,{
-             withCredentials: true
-           })
+  "addCourseIntoTheCart",
+  async (cartPayload, { dispatch }) => {
+    try {
+      console.log(cartPayload);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/allCartCourses/addIntoTheCart/${
+          cartPayload.id
+        }`,
+        {
+          withCredentials: true,
+        }
+      );
 
-           if(res.data?.success){
-              dispatch(getCourses(cartPayload.courseType))
-              dispatch(getCartCourses())
-           }
-           else{
-              console.log(res.data.message)
-           }
-       }
-       catch(error) {
-         console.log(error)
-       }
-   }
-)
+      if (res.data?.success) {
+        dispatch(getCourses(cartPayload.courseType));
+        dispatch(getCartCourses());
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const incrementQuantity = createAsyncThunk(
-   "incrementQuantity",
-     
-    async(cartPayload, { dispatch }) => {
-         try{
-              const res = await axios.put(`${import.meta.env.VITE_API_URL}/allCourses/incrementQuantity/${cartPayload.id}`,{
-                 withCredentials: true
-              })
+  "incrementQuantity",
 
-              if(res.data?.success){
-                console.log(res.data.data)
-                  await  dispatch(getCourses(cartPayload.courseType))
-                   await dispatch(getCartCourses())
-                   
-              }else{
-                console.log(res.data.message)
-              }
-         }
+  async (cartPayload, { dispatch }) => {
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/allCourses/incrementQuantity/${
+          cartPayload.id
+        }`,
+        {
+          withCredentials: true,
+        }
+      );
 
-         catch(error){
-          console.log(error)
-         }
+      if (res.data?.success) {
+        console.log(res.data.data);
+        await dispatch(getCourses(cartPayload.courseType));
+        await dispatch(getCartCourses());
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
-)
-
+  }
+);
 
 export const decrementQuantity = createAsyncThunk(
-   "decrementQuantity",
-     
-    async(cartPayload, { dispatch }) => {
-         try{
-              const res = await axios.put(`${import.meta.env.VITE_API_URL}/allCourses/decrementQuantity/${cartPayload.id}`,{
-                 withCredentials: true
-              })
+  "decrementQuantity",
 
-              if(res.data?.success){
-                   dispatch(getCourses(cartPayload.courseType))
-                   dispatch(getCartCourses())
-                   
-              }
-         }
+  async (cartPayload, { dispatch }) => {
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/allCourses/decrementQuantity/${
+          cartPayload.id
+        }`,
+        {
+          withCredentials: true,
+        }
+      );
 
-         catch(error){
-          console.log(error)
-         }
+      if (res.data?.success) {
+        dispatch(getCourses(cartPayload.courseType));
+        dispatch(getCartCourses());
+      }
+    } catch (error) {
+      console.log(error);
     }
-)
-
+  }
+);
 
 export const removeCourseFromTheCart = createAsyncThunk(
-   "removeCourseFromTheCart",
-     
-    async(cartPayload, { dispatch }) => {
-      console.log(cartPayload)
-         try{
-              const res = await axios.delete(`${import.meta.env.VITE_API_URL}/allCartCourses/deleteOneCourseFromCart/${cartPayload.id}`,{
-                 withCredentials: true
-              })
+  "removeCourseFromTheCart",
 
-              if(res.data?.success){
-                    dispatch(getCartCourses())
-                   dispatch(getCourses(cartPayload.courseType))
-                 
-              }
-         }
+  async (cartPayload, { dispatch }) => {
+    console.log(cartPayload);
+    try {
+      const res = await axios.delete(
+        `${
+          import.meta.env.VITE_API_URL
+        }/allCartCourses/deleteOneCourseFromCart/${cartPayload.id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-         catch(error){
-          console.log(error)
-         }
+      if (res.data?.success) {
+        dispatch(getCartCourses());
+        dispatch(getCourses(cartPayload.courseType));
+      }
+    } catch (error) {
+      console.log(error);
     }
-)
+  }
+);
+
+export const registerUser = createAsyncThunk(
+  "auth/registerUser",
+  async ({ userData, navigate }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/register`,
+        userData,
+        { withCredentials: true }
+      );
+
+      if (res.data?.success) {
+        console.log("User registered successfully!");
+        navigate("/signIn");
+      } else {
+        console.log("User not registered");
+        return rejectWithValue(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 
-export const {
-  getAllCourses,
-  getAllCartCourses,
-  clearCart
+export const loginUser = createAsyncThunk(
+  "loginUser",
 
-} = cartSlice.actions;
+  async ({ userData, navigate}, { rejectWithValue } ) => {
+
+    try {
+      const res = await axios.post(
+        `${
+          import.meta.env.VITE_API_URL
+        }/auth/login`, userData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data?.success) {
+          navigate("/")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+
+
+export const { getAllCourses, getAllCartCourses, clearCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

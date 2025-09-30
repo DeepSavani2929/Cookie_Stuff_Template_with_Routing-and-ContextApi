@@ -590,6 +590,7 @@
   flex-direction: column;
   padding: 10px 16px;
   text-align: left;
+  gap: 17px;
   flex: 1;
   min-height: 230px;
   background-color: #fff;
@@ -630,6 +631,14 @@
   border: none;
   margin-top: auto;
 }
+
+
+/* .featurecontent #nofeaturebtn {
+    font-weight: 500;
+  width: 130px;
+  font-size: 14px;
+} */
+
 
 .featurecontent .originalamount {
   text-decoration: line-through;
@@ -2733,9 +2742,9 @@
     font-size: 20px;
   }
 
-  .addintocart2 {
-    margin-top: 57px !important;
-  }
+  /* .addintocart2 {
+    margin-top: 65px !important;
+  } */
 }
 
 .contact-page {
@@ -3247,6 +3256,13 @@
   .foodcardsinner .singlefeature {
     width: 33.33%;
   }
+}
+
+
+/* signIn and singup */
+
+.inputarea{
+   padding: 0px 34px !important;
 }
 
 

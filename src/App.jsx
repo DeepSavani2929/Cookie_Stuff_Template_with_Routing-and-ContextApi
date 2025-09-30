@@ -13,6 +13,8 @@ import SinglePost from "./components/Posts/SinglePost";
 import SingleBlog from "./components/blog/SingleBlog";
 import ScrollToTop from "./components/ScrollToTop";
 import CourseDetails from "./coursedetails/CourseDetails";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/signUp";
 
 
 
@@ -29,7 +31,8 @@ function App() {
         <Route path="/posts" element={<Post />} />
         <Route path = "/readMoreAboutPost/:postId" element = {<SinglePost/>}/>
         <Route path = "/readMoreAboutBlog/:blogId" element = {<SingleBlog/>}/>
-        
+        <Route path = "/signIn" element = {<SignIn/>}/>
+        <Route path = "/signUp" element = {<SignUp/>}/>
       </Route>
     </Routes>
      </>
