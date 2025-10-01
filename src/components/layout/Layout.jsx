@@ -6,7 +6,7 @@ import { Outlet, useLocation } from "react-router-dom";
 const Layout = () => {
   const location = useLocation();
 
-  const hideFooter = location.pathname === "/signIn" || location.pathname === "/login";
+  const hideFooter = location.pathname === "/signIn" || location.pathname === "/signUp";
 
   return (
     <>

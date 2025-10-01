@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.png";
 
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Avatar, Badge, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import CartModal from "../cartTable/CartModal.jsx";
 import { clearCart, getCartCourses } from "../../store/cart/cartSlice.jsx";
 import Cookies from "js-cookie";
+import { logout, setLoggedIn } from "../../store/auth/authSlice.jsx";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [openProfile, setOpenProfile] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // const [openProfile, setOpenProfile] = useState(null);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  console.log(isLoggedIn);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart?.cartItems || []);
@@ -24,25 +27,20 @@ const Header = () => {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  useEffect(() => {
+    const token = Boolean(localStorage.getItem("accessToken"));
+    dispatch(setLoggedIn(token));
+  }, [dispatch]);
 
-useEffect(() => {
-  console.log(Cookies.get("accessToken"))
-  const isLoggedIn = Boolean(Cookies.get("accessToken"));
-  setIsLoggedIn(isLoggedIn)
-},[isLoggedIn,dispatch])
+  // const handleProfileClick = (event) => setOpenProfile(event.currentTarget);
+  // const handleProfileClose = () => setOpenProfile(null);
 
-
-
-  console.log(isLoggedIn);
-  const handleProfileClick = (event) => setOpenProfile(event.currentTarget);
-  const handleProfileClose = () => setOpenProfile(null);
-
-const handleLogout = () => {
-  Cookies.remove("accessToken");
-  dispatch(clearCart());          
-  handleProfileClose();    
-  navigate("/signIn");            
-};
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearCart());
+    // handleProfileClose();
+    navigate("/signIn");
+  };
 
   return (
     <>
@@ -130,16 +128,31 @@ const handleLogout = () => {
 
                 {isLoggedIn ? (
                   <>
-                    <IconButton onClick={handleProfileClick}>
-                      <Avatar alt="Profile" src="/path/to/profile.jpg" />
-                    </IconButton>
-                    <Menu
-                      anchorEl={openProfile}
-                      open={Boolean(openProfile)}
-                      onClose={handleProfileClose}
-                    >
-                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                    </Menu>
+                    <div>
+                      <IconButton >
+                        <Avatar alt="Profile" src="" />
+                      </IconButton>
+                    </div>
+
+                    <div id="headerbtn">
+                      <button
+                        id="logoutbtn"
+                        onClick={handleLogout}
+                        style={{
+                          width: "180px",
+                          fontFamily: "Yeseva One",
+                          height: "50px",
+                          border: "1px solid #f99106",
+                          backgroundColor: "#f99106",
+                          color: "white",
+                          borderRadius: "44px",
+                          fontSize: "18px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -194,16 +207,31 @@ const handleLogout = () => {
 
             {isLoggedIn ? (
               <>
-                <IconButton onClick={handleProfileClick}>
-                  <Avatar alt="Profile" src="/path/to/profile.jpg" />
-                </IconButton>
-                <Menu
-                  anchorEl={openProfile}
-                  open={Boolean(openProfile)}
-                  onClose={handleProfileClose}
-                >
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                </Menu>
+                <div>
+                  <IconButton >
+                    <Avatar alt="Profile" src="" />
+                  </IconButton>
+                </div>
+
+                <div id="headerbtn">
+                  <button
+                    id="logoutbtn"
+                    onClick={handleLogout}
+                    style={{
+                      width: "180px",
+                      fontFamily: "Yeseva One",
+                      height: "50px",
+                      border: "1px solid #f99106",
+                      backgroundColor: "#f99106",
+                      color: "white",
+                      borderRadius: "44px",
+                      fontSize: "18px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
               </>
             ) : (
               <>

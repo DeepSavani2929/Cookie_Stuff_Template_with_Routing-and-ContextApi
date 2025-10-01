@@ -1,8 +1,8 @@
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import './App.css';
-import './font/css/all.min.css'
-import React from 'react';
+import "./App.css";
+import "./font/css/all.min.css";
+import React from "react";
 import Home from "./components/Home/Home";
 import Features from "./components/Features/Features";
 import { Route, Routes } from "react-router";
@@ -15,28 +15,43 @@ import ScrollToTop from "./components/ScrollToTop";
 import CourseDetails from "./coursedetails/CourseDetails";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/signUp";
-
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
-     <>
-       <ScrollToTop />
-   <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/courses" element={<Features />} />
-         <Route path = "/individualCourseDeatils/:courseId" element = {<CourseDetails/>}/>
-        <Route path="/contactUs" element={<ContactUsPage />} />
-        <Route path="/posts" element={<Post />} />
-        <Route path = "/readMoreAboutPost/:postId" element = {<SinglePost/>}/>
-        <Route path = "/readMoreAboutBlog/:blogId" element = {<SingleBlog/>}/>
-        <Route path = "/signIn" element = {<SignIn/>}/>
-        <Route path = "/signUp" element = {<SignUp/>}/>
-      </Route>
-    </Routes>
-     </>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/courses" element={<Features />} />
+          <Route
+            path="/individualCourseDeatils/:courseId"
+            element={<CourseDetails />}
+          />
+          <Route path="/contactUs" element={<ContactUsPage />} />
+          <Route path="/posts" element={<Post />} />
+          <Route path="/readMoreAboutPost/:postId" element={<SinglePost />} />
+          <Route path="/readMoreAboutBlog/:blogId" element={<SingleBlog />} />
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+        </Route>
+      </Routes>
 
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 

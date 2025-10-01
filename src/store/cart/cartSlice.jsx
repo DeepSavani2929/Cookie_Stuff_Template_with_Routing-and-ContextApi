@@ -20,6 +20,7 @@ import blog2 from "../../assets/images/blog2.jpg";
 import blog3 from "../../assets/images/blog3.jpg";
 import axios from "axios";
 
+import Cookies from "js-cookie";
 
 
 const initialState = {
@@ -359,6 +360,8 @@ const initialState = {
   healthy: [],
 
   cartItems: [],
+
+  
 };
 
 export const cartSlice = createSlice({
@@ -377,8 +380,10 @@ export const cartSlice = createSlice({
       console.log(action.payload);
     },
 
-    clearCart: (state) => {
-      state.cartItems = [];
+
+    logout: (state) => {
+      state.isLoggedIn = false;
+      Cookies.remove("accessToken");
     },
   },
 });
@@ -532,58 +537,10 @@ export const removeCourseFromTheCart = createAsyncThunk(
   }
 );
 
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async ({ userData, navigate }, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/register`,
-        userData,
-        { withCredentials: true }
-      );
-
-      if (res.data?.success) {
-        console.log("User registered successfully!");
-        navigate("/signIn");
-      } else {
-        console.log("User not registered");
-        return rejectWithValue(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-
-export const loginUser = createAsyncThunk(
-  "loginUser",
-
-  async ({ userData, navigate}, { rejectWithValue } ) => {
-
-    try {
-      const res = await axios.post(
-        `${
-          import.meta.env.VITE_API_URL
-        }/auth/login`, userData,
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (res.data?.success) {
-          navigate("/")
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
 
 
 
-export const { getAllCourses, getAllCartCourses, clearCart } =
+export const { getAllCourses, getAllCartCourses, clearCart} =
   cartSlice.actions;
 
 export default cartSlice.reducer;

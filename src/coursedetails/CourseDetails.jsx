@@ -1,5 +1,4 @@
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import pfp from "../assets/images/prp.jpg";
@@ -7,33 +6,44 @@ import FreeRecipes from "../components/Recipes/FreeRecipes";
 import FeatureChild from "../components/Features/FeatureChild";
 import ContactUs from "../components/Contact/ContactUs";
 import { getCourses } from "../store/cart/cartSlice";
+import { toast } from "react-toastify";
+import axios from "axios";
 const CourseDetails = () => {
+  const [singleCourse, setSingleCourse] = useState({});
   const params = useParams();
-  const courseDetails = useSelector((state) => state.cart.courseDetails);
-  const dispatch = useDispatch()
-
-  const perticularCourse = courseDetails.find(
-    (course) => course.id === params.courseId
-  );
-
-  console.log(perticularCourse)
-
   const recipes = useSelector((state) => state.cart.recipes);
-  console.log(recipes)
 
-  const productQuantities = useSelector(
-    (state) => state.cart.productQuantities
-  );
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getCourses("Recipes"))
-    }, [dispatch])
+  const getCourse = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/allCourses/getCourse/${
+          params.courseId
+        }`,
+        {
+          withCredentials: true,
+        }
+      );
 
+      if (res.data?.success) {
+        toast.success(res.data.message);
+        setSingleCourse({ ...res.data.data });
+        console.log(res.data.data);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
+  useEffect(() => {
+    getCourse();
+    dispatch(getCourses("Recipes"));
+  }, [params.courseId]);
 
-  const getQuantity = (id) => productQuantities[id] || 1;
-
-  if (!perticularCourse) {
+  if (!singleCourse || Object.keys(singleCourse).length === 0) {
     return (
       <div className="text-center text-red-500 font-semibold !py-20">
         Course not found
@@ -68,9 +78,7 @@ const CourseDetails = () => {
                   <i className="fa-solid fa-user"></i>
                   <span className="text-black font-medium">Instructor</span>
                 </div>
-                <div className="text-[#00000080]">
-                  {perticularCourse.instructor}
-                </div>
+                <div className="text-[#00000080]">Zibiah Surya</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -79,9 +87,7 @@ const CourseDetails = () => {
                   <i className="fa-regular fa-clock"></i>
                   <span className="text-black font-medium">Duration</span>
                 </div>
-                <div className="text-[#00000080]">
-                  {perticularCourse.duration}
-                </div>
+                <div className="text-[#00000080]">05 hr 15 mins</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -90,9 +96,7 @@ const CourseDetails = () => {
                   <i className="fa-solid fa-video"></i>
                   <span className="text-black font-medium">Lectures</span>
                 </div>
-                <div className="text-[#00000080]">
-                  {perticularCourse.lectures}
-                </div>
+                <div className="text-[#00000080]">10</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -101,7 +105,7 @@ const CourseDetails = () => {
                   <i className="fa-solid fa-chart-simple"></i>
                   <span className="text-black font-medium">Level</span>
                 </div>
-                <div className="text-[#00000080]">{perticularCourse.level}</div>
+                <div className="text-[#00000080]">Beginner</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -110,9 +114,7 @@ const CourseDetails = () => {
                   <i className="fa-solid fa-globe"></i>
                   <span className="text-black font-medium">Language</span>
                 </div>
-                <div className="text-[#00000080]">
-                  {perticularCourse.language}
-                </div>
+                <div className="text-[#00000080]">English</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -121,9 +123,7 @@ const CourseDetails = () => {
                   <i className="fa-regular fa-file-lines"></i>
                   <span className="text-black font-medium">Certificate</span>
                 </div>
-                <div className="text-[#00000080]">
-                  {perticularCourse.Certificate}
-                </div>
+                <div className="text-[#00000080]">Yes</div>
               </div>
               <hr className="text-[#f99106] opacity-30" />
 
@@ -152,13 +152,13 @@ const CourseDetails = () => {
             <img
               className="h-[350px] w-full object-cover rounded-t-xl"
               alt=""
-              src={perticularCourse.image}
+              src={`http://localhost:8000/images/${singleCourse.image}`}
             />
             <h1
               className="text-2xl md:text-3xl"
               style={{ fontFamily: "Yeseva One" }}
             >
-              {perticularCourse.detail1}
+              {singleCourse.title}
             </h1>
 
             <div className="flex flex-col md:flex-row gap-3 justify-between items-center">
@@ -169,22 +169,17 @@ const CourseDetails = () => {
                   src={pfp}
                 />
                 <p className="text-[0.9rem] font-[Poppins]">
-                  <span className="text-[#717171]">By</span>:{" "}
-                  {perticularCourse.by}
+                  <span className="text-[#717171]">By</span>:Zibiah Surya
                 </p>
               </div>
 
               <div className="flex items-center gap-2 text-[1.1rem]">
-                <p className="text-[#f99106]">
-                  {perticularCourse.enrolledStudents}
-                </p>
+                <p className="text-[#f99106]">300</p>
                 <p className="text-[#717171]">Enrolled Students</p>
               </div>
 
               <div className="flex items-center gap-2 text-[1.3rem]">
-                <p style={{ color: "rgb(249,145,6)" }}>
-                  {perticularCourse.rating}
-                </p>
+                <p style={{ color: "rgb(249,145,6)" }}>4.2</p>
                 <div className="text-[#f99106] flex items-center">
                   <p>★</p>
                   <p>★</p>
@@ -192,7 +187,7 @@ const CourseDetails = () => {
                   <p>★</p>
                   <p>☆</p>
                 </div>
-                <p className="text-[#949494ff]">({perticularCourse.year})</p>
+                <p className="text-[#949494ff]">(2002)</p>
               </div>
             </div>
 
@@ -206,10 +201,10 @@ const CourseDetails = () => {
             <div className="font-[Poppins] flex flex-col lg:flex-row justify-between gap-2 items-center w-[100%]">
               <div className="flex flex-col items-start justify-between gap-6 h-full w-full lg:w-[45%]">
                 {[
-                  perticularCourse.detail1,
-                  perticularCourse.detail3,
-                  perticularCourse.detail5,
-                  perticularCourse.detail6,
+                  singleCourse.title,
+                  "100% veg recipes",
+                  "Learn from Experts",
+                  "Explore new recipes every day",
                 ].map((detail, idx) => (
                   <div key={idx} className="flex items-start gap-4 w-full">
                     <div className="w-[8%]">
@@ -226,10 +221,10 @@ const CourseDetails = () => {
 
               <div className="flex flex-col gap-6 w-full lg:w-[45%]">
                 {[
-                  perticularCourse.detail2,
-                  perticularCourse.detail4,
-                  perticularCourse.detail7,
-                  perticularCourse.detail8,
+                  "100% veg recipes",
+                  "Doubt solving over call",
+                  "Explore new recipes every day",
+                  "Free Lifetime Access",
                 ].map((detail, idx) => (
                   <div key={idx} className="flex items-start gap-4 w-full">
                     <div className="w-[8%]">
@@ -253,17 +248,16 @@ const CourseDetails = () => {
       <div className="foodcardscontainer">
         <div className="foodcardsinner">
           {recipes.map((ele, i) => {
-            const quantity = getQuantity(ele.id);
             return (
               <>
-                <FeatureChild key={i} fatureele={ele} quantity={quantity} />
+                <FeatureChild key={i} fatureele={ele} />
               </>
             );
           })}
         </div>
       </div>
 
-      <ContactUs/>
+      <ContactUs />
     </>
   );
 };
