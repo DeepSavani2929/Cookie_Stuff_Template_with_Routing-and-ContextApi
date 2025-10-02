@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import FeatureChild from "./FeatureChild.jsx";
 import React, { useEffect } from "react";
-import FreeRecipes from "../Recipes/FreeRecipes.jsx";
+import FreeRecipes from "../recipes/FreeRecipes.jsx";
 import { useLocation } from "react-router";
-import HealthyRecipes from "../Healthy/HealthyRecipes.jsx";
+import HealthyRecipes from "../healthy/HealthyRecipes.jsx";
 import { getCourses } from "../../store/cart/cartSlice.jsx";
 
 const Features = () => {

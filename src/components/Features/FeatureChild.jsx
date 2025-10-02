@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -11,13 +10,26 @@ import {
 const FeatureChild = ({ fatureele }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+
+  const addIntoCart = () => {
+    if (isLoggedIn) {
+      dispatch(
+        addCourseIntoTheCart({
+          id: fatureele._id,
+          courseType: fatureele.courseType,
+        })
+      );
+    } else {
+      navigate("/signIn");
+    }
+  };
 
   const handleOnCart = (id) => {
     navigate(`/individualCourseDeatils/${id}`);
   };
-
-  const cartItems = useSelector((state) => state.cart.cartItems);
-
 
   const cartItem = cartItems.find(
     (item) =>
@@ -27,7 +39,6 @@ const FeatureChild = ({ fatureele }) => {
 
   return (
     <div className="singlefeature">
-
       <div className="image" onClick={() => handleOnCart(fatureele._id)}>
         <img
           id="img"
@@ -36,12 +47,10 @@ const FeatureChild = ({ fatureele }) => {
         />
       </div>
 
-
       <div className="featurecontent">
         <h3>
           {fatureele.title} <div>(Lifetime Access)</div>
         </h3>
-
 
         <p className="ratingpart">
           <span id="rating">4.2</span>
@@ -51,7 +60,6 @@ const FeatureChild = ({ fatureele }) => {
           </span>
         </p>
 
-
         <p className="price">
           <span className="amount">₹ {fatureele.amount}</span>
           <span className="originalamount">₹ {fatureele.originalAmount}</span>
@@ -59,8 +67,9 @@ const FeatureChild = ({ fatureele }) => {
 
         {fatureele.buttonText ? (
           <button id="featurebtn">{fatureele.buttonText}</button>
-        ) : <div></div>}
-
+        ) : (
+          <div></div>
+        )}
 
         <div
           className={`addintocart ${
@@ -69,7 +78,6 @@ const FeatureChild = ({ fatureele }) => {
           style={!fatureele.buttonText ? { marginTop: "29px" } : {}}
         >
           {cartItem ? (
-
             <div className="quantitycal">
               <button
                 className="decre"
@@ -100,18 +108,7 @@ const FeatureChild = ({ fatureele }) => {
               </button>
             </div>
           ) : (
-
-            <button
-              className="cartadding"
-              onClick={() =>
-                dispatch(
-                  addCourseIntoTheCart({
-                    id: fatureele._id,
-                    courseType: fatureele.courseType,
-                  })
-                )
-              }
-            >
+            <button className="cartadding" onClick={addIntoCart}>
               Add To Cart
             </button>
           )}

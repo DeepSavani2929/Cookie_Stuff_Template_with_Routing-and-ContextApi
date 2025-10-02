@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.png";
-
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Avatar, Badge, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import CartModal from "../cartTable/CartModal.jsx";
 import { clearCart, getCartCourses } from "../../store/cart/cartSlice.jsx";
-import Cookies from "js-cookie";
 import { logout, setLoggedIn } from "../../store/auth/authSlice.jsx";
 
 const Header = () => {
@@ -24,14 +22,12 @@ const Header = () => {
 
   useEffect(() => {
     const token = Boolean(localStorage.getItem("accessToken"));
-  dispatch(setLoggedIn(!!token));
+    dispatch(setLoggedIn(!!token));
 
-    if(token){
-          dispatch(getCartCourses());
+    if (token) {
+      dispatch(getCartCourses());
     }
   }, [dispatch]);
-
- 
 
   const handleLogout = () => {
     dispatch(logout());
@@ -128,7 +124,7 @@ const Header = () => {
                 {isLoggedIn ? (
                   <>
                     <div>
-                      <IconButton >
+                      <IconButton>
                         <Avatar alt="Profile" src="" />
                       </IconButton>
                     </div>
@@ -207,7 +203,7 @@ const Header = () => {
             {isLoggedIn ? (
               <>
                 <div>
-                  <IconButton >
+                  <IconButton>
                     <Avatar alt="Profile" src="" />
                   </IconButton>
                 </div>

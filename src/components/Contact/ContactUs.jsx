@@ -52,20 +52,19 @@ const ContactUs = () => {
               <h3>Get in touch</h3>
               <p>
                 <span>
-                  {" "}
+
                   <span className="address">Phone:</span>
                 </span>
-                <p>+123 456 7890</p>{" "}
+                <p>+123 456 7890</p>
               </p>
               <p>
                 <span className="details">
                   <span className="address">Address: </span>Lumbung <br />
                   Hidup St. Madiun <br /> City East Java 63125
-                </span>{" "}
+                </span>
               </p>
               <p>
                 <span>
-                  {" "}
                   <span className="address">Email: </span>
                 </span>
                 <p>cookingstuff@gmail.com</p>

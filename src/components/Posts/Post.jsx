@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import PostChild from "./PostChild";
+import PostChild from "./PostChild.jsx";
 
 import { Switch } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import FeatureChild from "../Features/FeatureChild";
+import FeatureChild from "../features/FeatureChild";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { getCourses } from "../../store/cart/cartSlice";

@@ -9,11 +9,11 @@ import { Provider } from "react-redux";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+
     <Provider store={store}>
       <CustomThemeProvider>
         <App />
       </CustomThemeProvider>
     </Provider>
-  </BrowserRouter>
+
 );
