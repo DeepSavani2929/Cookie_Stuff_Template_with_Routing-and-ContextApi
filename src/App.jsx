@@ -5,7 +5,7 @@ import "./font/css/all.min.css";
 import React from "react";
 import Home from "./components/Home/Home";
 import Features from "./components/Features/Features";
-import { Route, Routes } from "react-router";
+import {  Route, Routes } from "react-router";
 import Post from "./components/Posts/Post";
 import ContactUsPage from "./components/ContactPage/ContactUsPage";
 import Layout from "./components/layout/Layout";
@@ -17,7 +17,23 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/signUp";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+// import { RouterProvider, createBrowserRouter} from "react-router-dom";
 
+
+// const router = createBrowserRouter([
+//   {
+//       path: "/",
+//       element: <Layout/>,
+//       children : [
+//           { path: "/", element : <Home/>},
+//           { path : "/courses", element : <Features/>},
+//           {path: "/contactUs", element: <ContactUsPage />},
+//           {path: "/posts", element: <Post/>},
+//           {path: "/read"}
+
+//       ]
+//   }
+// ])
 function App() {
   return (
     <>
@@ -38,6 +54,7 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
         </Route>
       </Routes>
+      {/* <RouterProvider/> */}
 
       <ToastContainer
         position="top-center"

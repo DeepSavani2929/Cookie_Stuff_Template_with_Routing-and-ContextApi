@@ -22,7 +22,6 @@ import axios from "axios";
 
 import Cookies from "js-cookie";
 
-
 const initialState = {
   posts: [
     {
@@ -360,8 +359,6 @@ const initialState = {
   healthy: [],
 
   cartItems: [],
-
-  
 };
 
 export const cartSlice = createSlice({
@@ -380,6 +377,9 @@ export const cartSlice = createSlice({
       console.log(action.payload);
     },
 
+    clearCart: (state) => {
+      state.cartItems = [];
+    },
 
     logout: (state) => {
       state.isLoggedIn = false;
@@ -398,6 +398,7 @@ export const getCourses = createAsyncThunk(
         }/allCourses/getAllCourses?courseType=${courseType}`,
         { withCredentials: true }
       );
+      console.log(res, "res in get all courses");
 
       if (res.data?.success) {
         dispatch(getAllCourses({ type: courseType, data: res.data.data }));
@@ -415,11 +416,16 @@ export const getCartCourses = createAsyncThunk(
   "getCartCourses",
   async (_, { dispatch }) => {
     try {
+      const token = localStorage.getItem("accessToken");
       const res = await axios.get(
         `${
           import.meta.env.VITE_API_URL
         }/allCartCourses/getAllCoursesAvailableIntoCart`,
+
         {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -439,12 +445,17 @@ export const addCourseIntoTheCart = createAsyncThunk(
   "addCourseIntoTheCart",
   async (cartPayload, { dispatch }) => {
     try {
+      const token = localStorage.getItem("accessToken");
       console.log(cartPayload);
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/allCartCourses/addIntoTheCart/${
           cartPayload.id
         }`,
+        {},
         {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -452,7 +463,7 @@ export const addCourseIntoTheCart = createAsyncThunk(
       if (res.data?.success) {
         dispatch(getCourses(cartPayload.courseType));
         dispatch(getCartCourses());
-      } else {
+      } else { 
         console.log(res.data.message);
       }
     } catch (error) {
@@ -466,12 +477,17 @@ export const incrementQuantity = createAsyncThunk(
 
   async (cartPayload, { dispatch }) => {
     try {
+      const token = localStorage.getItem("accessToken");
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/allCourses/incrementQuantity/${
+        `${import.meta.env.VITE_API_URL}/allCartCourses/incrementQuantity/${
           cartPayload.id
         }`,
+        {},
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -493,11 +509,16 @@ export const decrementQuantity = createAsyncThunk(
 
   async (cartPayload, { dispatch }) => {
     try {
+      const token = localStorage.getItem("accessToken");
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/allCourses/decrementQuantity/${
+        `${import.meta.env.VITE_API_URL}/allCartCourses/decrementQuantity/${
           cartPayload.id
         }`,
+        {},
         {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -518,11 +539,15 @@ export const removeCourseFromTheCart = createAsyncThunk(
   async (cartPayload, { dispatch }) => {
     console.log(cartPayload);
     try {
+      const token = localStorage.getItem("accessToken");
       const res = await axios.delete(
         `${
           import.meta.env.VITE_API_URL
         }/allCartCourses/deleteOneCourseFromCart/${cartPayload.id}`,
         {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           withCredentials: true,
         }
       );
@@ -537,10 +562,7 @@ export const removeCourseFromTheCart = createAsyncThunk(
   }
 );
 
-
-
-
-export const { getAllCourses, getAllCartCourses, clearCart} =
+export const { getAllCourses, getAllCartCourses, clearCart } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

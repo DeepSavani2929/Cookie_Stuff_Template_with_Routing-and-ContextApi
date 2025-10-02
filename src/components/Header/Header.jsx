@@ -13,7 +13,6 @@ import { logout, setLoggedIn } from "../../store/auth/authSlice.jsx";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  // const [openProfile, setOpenProfile] = useState(null);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   console.log(isLoggedIn);
 
@@ -21,25 +20,25 @@ const Header = () => {
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart?.cartItems || []);
 
-  useEffect(() => {
-    dispatch(getCartCourses());
-  }, [dispatch]);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   useEffect(() => {
     const token = Boolean(localStorage.getItem("accessToken"));
-    dispatch(setLoggedIn(token));
+  dispatch(setLoggedIn(!!token));
+
+    if(token){
+          dispatch(getCartCourses());
+    }
   }, [dispatch]);
 
-  // const handleProfileClick = (event) => setOpenProfile(event.currentTarget);
-  // const handleProfileClose = () => setOpenProfile(null);
+ 
 
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart());
-    // handleProfileClose();
-    navigate("/signIn");
+    dispatch(getCartCourses());
+
+    navigate("/");
   };
 
   return (
