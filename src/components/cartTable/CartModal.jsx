@@ -29,6 +29,10 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import axios from "axios";
+
+// import {loadStripe} from '@stripe/stripe-js';
+
 
 const CartModal = ({ open, setOpen }) => {
   const dispatch = useDispatch();
@@ -78,6 +82,37 @@ const CartModal = ({ open, setOpen }) => {
     setConfirmOpen(false);
     setDeleteId(null);
   };
+
+
+
+const buyCourses = async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    const body = { products: cartItems };
+
+
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/buyAllCartCourses/createCheckoutSession`,
+      body,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      }
+    );
+
+    if (res.data.success && res.data.url) {
+
+      window.location.href = res.data.url;
+    } else {
+      alert("Payment failed: " + (res.data.message || "Unknown error"));
+    }
+  } catch (err) {
+    console.error("Stripe checkout error:", err);
+    alert("Something went wrong while initiating checkout!");
+  }
+};
+
 
   const filteredItems = useMemo(() => {
     let items = [...cartItems];
@@ -160,8 +195,16 @@ const CartModal = ({ open, setOpen }) => {
                     setPage(0);
                   }}
                 />
-              </Box>
 
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ whiteSpace: "nowrap" }}
+                  onClick={buyCourses}
+                >
+                  Buy
+                </Button>
+              </Box>
               <Box sx={{ overflowX: "auto" }}>
                 <Table sx={{ minWidth: 650 }}>
                   <TableHead>

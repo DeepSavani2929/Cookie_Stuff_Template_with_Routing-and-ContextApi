@@ -19,6 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/PublicRoute";
+import PaymentSuccess from "./components/payment/PaymentSuccess";
+import PaymentCancel from "./components/payment/PaymentCancel";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,7 @@ const router = createBrowserRouter([
       { path: "/courses", element: <Features /> },
       { path: "/contactUs", element: <ContactUsPage /> },
       { path: "/posts", element: <Post /> },
+
       {
         element: <ProtectedRoute />,
         children: [
@@ -57,6 +60,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    element: <ProtectedRoute/>,
+    children: [
+       
+           { path: "/paymentSuccess", element: <PaymentSuccess /> },
+          { path: "/paymentCancel", element: <PaymentCancel /> },
+       
+    ]
+  }
 ]);
 
 function App() {
